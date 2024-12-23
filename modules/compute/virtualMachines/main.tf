@@ -35,28 +35,10 @@ resource "azurerm_managed_disk" "datadisk" {
   depends_on = [ azurerm_linux_virtual_machine.appvm ]
 }
 
-resource "azurerm_managed_disk" "datadisk-1" {
-  name                 = "datadisk-1"
-  location             = var.location
-  resource_group_name  = var.resource_group_name
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = "4"
-  depends_on = [ azurerm_linux_virtual_machine.appvm ]
-}
-
-
 resource "azurerm_virtual_machine_data_disk_attachment" "datadisk_attachment" {
   count = var.virtual_machine_count
   managed_disk_id    = azurerm_managed_disk.datadisk-1.id
   virtual_machine_id = azurerm_linux_virtual_machine.appvm[count.index].id
   lun                = "1"
-  caching            = "ReadWrite"
-}
-resource "azurerm_virtual_machine_data_disk_attachment" "datadisk_attachment1" {
-  count = var.virtual_machine_count
-  managed_disk_id    = azurerm_managed_disk.datadisk[count.index].id
-  virtual_machine_id = azurerm_linux_virtual_machine.appvm[count.index].id
-  lun                = "0"
   caching            = "ReadWrite"
 }
