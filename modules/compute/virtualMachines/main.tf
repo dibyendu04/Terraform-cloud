@@ -37,8 +37,8 @@ resource "azurerm_managed_disk" "datadisk" {
 
 resource "azurerm_virtual_machine_data_disk_attachment" "datadisk_attachment" {
   count = var.virtual_machine_count
-  managed_disk_id    = azurerm_managed_disk.datadisk-1.id
+  managed_disk_id    = azurerm_managed_disk.datadisk[count.index].id
   virtual_machine_id = azurerm_linux_virtual_machine.appvm[count.index].id
-  lun                = "1"
+  lun                = "0"
   caching            = "ReadWrite"
 }
